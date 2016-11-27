@@ -116,32 +116,37 @@ export default ({
       line
     } = path.node.loc.start;
 
-    const packagePath = findPackageJsonPath(dirname(state.file.opts.filename));
-    const packageConfiguration = JSON.parse(readFileSync(packagePath, 'utf-8'));
-    const relativeScriptPath = relative(dirname(packagePath), state.file.opts.filename);
-    const functionName = getFunctionName(path);
-
-    comments
+    const deprecationMessages = comments
       .map((comment) => {
         return comment.value;
       })
       .map(getCommentDeprecatedTagDescriptions)
       .reduce((accumulator, currentValue) => {
         return accumulator.concat(currentValue);
-      }, [])
-      .forEach((message) => {
-        const consoleCallExpression = createConsoleCallExpression('warn', createMessage(functionName, line, relativeScriptPath), {
-          functionName,
-          message,
-          packageName: packageConfiguration.name,
-          packageVersion: packageConfiguration.version,
-          scriptColumn: column,
-          scriptLine: line,
-          scriptPath: relativeScriptPath
-        });
+      }, []);
 
-        path.get('body').unshiftContainer('body', consoleCallExpression);
+    if (deprecationMessages.length === 0) {
+      return;
+    }
+
+    const packagePath = findPackageJsonPath(dirname(state.file.opts.filename));
+    const packageConfiguration = JSON.parse(readFileSync(packagePath, 'utf-8'));
+    const relativeScriptPath = relative(dirname(packagePath), state.file.opts.filename);
+    const functionName = getFunctionName(path);
+
+    for (const deprecationMessage of deprecationMessages) {
+      const consoleCallExpression = createConsoleCallExpression('warn', createMessage(functionName, line, relativeScriptPath), {
+        functionName,
+        message: deprecationMessage,
+        packageName: packageConfiguration.name,
+        packageVersion: packageConfiguration.version,
+        scriptColumn: column,
+        scriptLine: line,
+        scriptPath: relativeScriptPath
       });
+
+      path.get('body').unshiftContainer('body', consoleCallExpression);
+    }
   };
 
   return {
