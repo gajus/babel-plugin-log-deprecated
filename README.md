@@ -9,7 +9,6 @@ Adds a `console.warn` statement to the functions annotated with the [JSDoc `@dep
 
 * [Example transpilation](#example-transpilation)
 * [Motivation](#motivation)
-* [Difference from `warning`](#difference-from-warning)
 * [Implementation](#implementation)
   * [Deprecation message fields](#deprecation-message-filds)
   * [`package.json` resolution](#packagejson-resolution)
