@@ -7,6 +7,8 @@
 
 Adds a `console.warn` statement to the functions annotated with the [JSDoc `@deprecated` tag](http://usejsdoc.org/tags-deprecated.html).
 
+The `console.warn` is added at the beginning of the function body.
+
 * [Example transpilation](#example-transpilation)
 * [Motivation](#motivation)
 * [Implementation](#implementation)
@@ -21,7 +23,9 @@ Input:
 /**
  * @deprecated Deprecated in favour of quux.
  */
-function foo () {};
+function foo () {
+  bar();
+};
 
 ```
 
@@ -40,7 +44,9 @@ function foo () {
     scriptColumn: 0,
     scriptLine: 4,
     scriptPath: "fixtures/preset-options/adds-console-warn-to-function-declaration/actual.js"
-  })
+  });
+
+  bar();
 };
 
 ```
