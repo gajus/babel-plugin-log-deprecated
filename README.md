@@ -31,7 +31,7 @@ Output:
 /**
  * @deprecated Deprecated in favour of quux.
  */
-function foo() {
+function foo () {
   console.warn("Deprecated: Function \"foo\" is deprecated in /fixtures/preset-options/adds-console-warn-to-function-declaration/actual.js on line 4", {
     functionName: "foo",
     message: "Deprecated in favour of quux.",
