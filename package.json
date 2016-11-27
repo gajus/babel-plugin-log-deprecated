@@ -41,5 +41,5 @@
     "precommit": "npm run test",
     "test": "NODE_ENV=development npm run lint && npm run build && mocha --compilers js:babel-register && flow"
   },
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
