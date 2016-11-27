@@ -1,7 +1,5 @@
 // @flow
 
-// test
-
 import {
   dirname,
   relative
@@ -60,7 +58,10 @@ export default ({
       return path.parent.id.name;
     }
 
-    throw new Error('Cannot get node name.');
+    // @todo This is failing in a large codebase. Inspect what conditions are uncovered. Temporarily report function as "anonymous".
+    // throw new Error('Cannot get node name.');
+
+    return 'anonymous';
   };
 
   const createConsoleCallExpression = (severityCategory: SeverityCategoryType, message: string, sourceLocation: SourceLocationType) => {
