@@ -144,10 +144,18 @@ export default ({
   return {
     visitor: {
       'ArrowFunctionExpression|FunctionExpression' (path: Object, state: Object) {
-        processNode(path, state, path.parentPath.parent.leadingComments || []);
+        if (!path.parentPath.parent.leadingComments || path.parentPath.parent.leadingComments.length === 0) {
+          return;
+        }
+
+        processNode(path, state, path.parentPath.parent.leadingComments);
       },
       'FunctionDeclaration' (path: Object, state: Object) {
-        processNode(path, state, path.node.leadingComments || []);
+        if (!path.node.leadingComments || path.node.leadingComments.length === 0) {
+          return;
+        }
+
+        processNode(path, state, path.node.leadingComments);
       }
     }
   };
