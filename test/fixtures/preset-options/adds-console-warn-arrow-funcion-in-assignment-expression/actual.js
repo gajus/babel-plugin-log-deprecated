@@ -1,0 +1,6 @@
+let foo;
+
+/**
+ * @deprecated
+ */
+foo = () => {};
