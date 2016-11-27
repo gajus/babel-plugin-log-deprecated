@@ -11,6 +11,7 @@ The `console.warn` is added at the beginning of the function body.
 
 * [Example transpilation](#example-transpilation)
 * [Motivation](#motivation)
+* [Using in production](#using-in-production)
 * [Implementation](#implementation)
   * [Deprecation message fields](#deprecation-message-filds)
   * [`package.json` resolution](#packagejson-resolution)
@@ -64,6 +65,36 @@ To address these issues, `babel-plugin-log-deprecated`:
 1. Uses JSDoc `@deprecated` tag to construct the deprecation log `message` property.
 1. Utilises build time information (`package.json` configuration, script path) to enrich the deprecation message.
 1. Enforces a consistent error message format.
+
+## Using in production
+
+This transpiler can be used to produce code for client-side use and Node.js. Whether to leave the warnings in the production build depends on the use case.
+
+Regarding the client-side use, I have been asked:
+
+> inu-no-policemen:
+>
+> Wouldn't it make more sense to get these messages at compile time?
+>
+> Messages which only appear if a particular path is taken through the application are easy to miss.
+
+– https://www.reddit.com/r/javascript/comments/5f71la/i_have_written_a_babel_transpiler_that_adds/dai062z/
+
+I am using this plugin to add warning messages that are visible at a runtime on purpose. Think about large organizations that have multiple teams working on a frontend of the same website. There is a lot of code in the `window` namespace:
+
+|Website|`Object.keys(window).length`|
+|---|---|
+|https://www.google.com/blank.html|181 (base figure)|
+|https://www.ft.com/|229 (+48)|
+|https://www.theguardian.com/uk|269 (+88)|
+|http://www.dailymail.co.uk/home/index.html|599 (+418)|
+|http://time.com/|669 (+488)|
+
+Furthermore, this is just the count of the properties in the `window` namespace. A number of these properties will expose complex APIs that tie together the entire website (think user targeting, advertising, utilities, etc.).
+
+You cannot simply remove properties because you risk of breaking things. Therefore, a sensible solution is to communicate the upcoming changes to the other teams and add deprecation warnings well ahead of making the change.
+
+In a similar fashion, a public library can use the deprecation warning to inform the consumers of the upcoming changes.
 
 ## Implementation
 
