@@ -144,10 +144,10 @@ export default ({
   return {
     visitor: {
       'ArrowFunctionExpression|FunctionExpression' (path: Object, state: Object) {
-        processNode(path, state, path.parentPath.parent.leadingComments);
+        processNode(path, state, path.parentPath.parent.leadingComments || []);
       },
       'FunctionDeclaration' (path: Object, state: Object) {
-        processNode(path, state, path.node.leadingComments);
+        processNode(path, state, path.node.leadingComments || []);
       }
     }
   };
