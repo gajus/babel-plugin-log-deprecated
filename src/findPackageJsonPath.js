@@ -2,6 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
+import {
+  NotFoundError
+} from './errors';
 
 const findPackageJsonPath = (directoryPath: string): string => {
   const filePath = path.resolve(directoryPath, 'package.json');
@@ -15,7 +18,7 @@ const findPackageJsonPath = (directoryPath: string): string => {
       const nextDirectoryPath = path.resolve(directoryPath, '..');
 
       if (nextDirectoryPath === directoryPath) {
-        throw new Error('package.json not found');
+        throw new NotFoundError('package.json not found');
       }
 
       return findPackageJsonPath(nextDirectoryPath);
