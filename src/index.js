@@ -17,8 +17,8 @@ type SeverityCategoryType = 'log' | 'info' | 'warn' | 'error';
 type SourceLocationType = {|
   functionName: string,
   message: string | null,
-  packageName: string,
-  packageVersion: string,
+  packageName: string | null,
+  packageVersion: string | null,
   scriptColumn: number,
   scriptLine: number,
   scriptPath: string
@@ -83,11 +83,11 @@ export default ({
           ),
           t.objectProperty(
             t.identifier('packageName'),
-            t.stringLiteral(sourceLocation.packageName)
+            sourceLocation.packageName === null ? t.nullLiteral() : t.stringLiteral(sourceLocation.packageName)
           ),
           t.objectProperty(
             t.identifier('packageVersion'),
-            t.stringLiteral(sourceLocation.packageVersion)
+            sourceLocation.packageVersion === null ? t.nullLiteral() : t.stringLiteral(sourceLocation.packageVersion)
           ),
           t.objectProperty(
             t.identifier('scriptColumn'),
@@ -138,8 +138,8 @@ export default ({
       const consoleCallExpression = createConsoleCallExpression('warn', createMessage(functionName, line, relativeScriptPath), {
         functionName,
         message: deprecationMessage,
-        packageName: packageConfiguration.name,
-        packageVersion: packageConfiguration.version,
+        packageName: packageConfiguration.name || null,
+        packageVersion: packageConfiguration.version || null,
         scriptColumn: column,
         scriptLine: line,
         scriptPath: relativeScriptPath
